@@ -12,3 +12,6 @@ A gpu monitor script to monitor gpu uages across multiple servers in one single 
     ```sh
     python gpu_monitor.py
     ```
+4. You'll see this:
+
+![gpumonitor](https://user-images.githubusercontent.com/39082096/230078078-173f5e82-661d-42cc-b991-b551373cf824.jpg)
