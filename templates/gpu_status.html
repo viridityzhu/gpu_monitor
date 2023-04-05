@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>GPU Status</title>
+    <style>
+    table {
+        border-collapse: collapse;
+        width: 100%;
+    }
+
+    th, td {
+        text-align: left;
+        padding: 8px;
+        font-size: 14px;
+        font-weight: normal;
+        border-bottom: 1px solid #ddd;
+    }
+
+    th {
+        background-color: #f2f2f2;
+        color: #444;
+        font-weight: bold;
+    }
+
+    tr:hover {
+        background-color: #f5f5f5;
+    }
+
+    .error {
+        color: red;
+        font-weight: bold;
+    }
+</style>
+
+</head>
+<body>
+    <h1>GPU Status</h1>
+    <table>
+        <thead>
+            <tr>
+                <th>Server</th>
+                <th>GPU Name</th>
+                <th>Memory Used (MiB)</th>
+                <th>Memory Total (MiB)</th>
+                <th>Memory Free (MiB)</th>
+                <th>Temperature (C)</th>
+                <th>Utilization (%)</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for server_name, info in gpu_info.items() %}
+                {% if 'Error' not in info %}
+                    {% for usage in info %}
+                        <tr>
+                            <td>{{ server_name }}</td>
+                            <td>{{ usage.name }}</td>
+                            <td>{{ usage.memory_used }}</td>
+                            <td>{{ usage.memory_total }}</td>
+                            <td>{{ usage.memory_free }}</td>
+                            <td>{{ usage.temperature }}</td>
+                            <td>{{ usage.utilization }}</td>
+                        </tr>
+                    {% endfor %}
+                {% else %}
+                    <tr>
+                        <td>{{ server_name }}</td>
+                        <td class="error" colspan="6">Error</td>
+                    </tr>
+                {% endif %}
+            {% endfor %}
+        </tbody>
+    </table>
+</body>
+</html>
+
