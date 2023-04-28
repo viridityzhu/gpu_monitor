@@ -30,6 +30,25 @@
         color: red;
         font-weight: bold;
     }
+
+    .node-info {
+        margin: 0px 0 0px 0;
+        border-left: 5px solid darkgrey;
+        font-size: 20px;
+        font-weight: 700;
+    }
+
+    .memory {
+        border-left: 1px solid black;
+        border-right: 1px solid black;
+    }
+    .collapsible-body {
+        display: none;
+    }
+
+    .collapsible.open .collapsible-body {
+        display: block;
+    }
 </style>
 
 </head>
@@ -38,27 +57,41 @@
     <table>
         <thead>
             <tr>
-                <th>Server</th>
                 <th>GPU Name</th>
                 <th>Memory Used (MiB)</th>
-                <th>Memory Total (MiB)</th>
+                <!-- <th>Memory Total (MiB)</th> -->
                 <th>Memory Free (MiB)</th>
                 <th>Temperature (C)</th>
                 <th>Utilization (%)</th>
+                <th>Who is Using</th>
+                <th>Mem Used</th>
+                <th>Command</th>
             </tr>
         </thead>
         <tbody>
             {% for server_name, info in gpu_info.items() %}
                 {% if 'Error' not in info %}
+                    <tr>
+                        <td colspan="8" class="node-info">{{ server_name }} &nbsp;&nbsp;&nbsp;&nbsp; {{ info[0].name}}</td>
+                    </tr>
                     {% for usage in info %}
                         <tr>
-                            <td>{{ server_name }}</td>
-                            <td>{{ usage.name }}</td>
-                            <td>{{ usage.memory_used }}</td>
-                            <td>{{ usage.memory_total }}</td>
+                            <td>{{ usage.idx }}</td>
+                            <td class="memory" style="background: linear-gradient(to right, rgb(153, 204, 102) {{ usage.memory_used / usage.memory_total * 100 }}%, white {{ usage.memory_used / usage.memory_total * 100 }}%, white);">{{ usage.memory_used }} / {{ usage.memory_total }}</td>
                             <td>{{ usage.memory_free }}</td>
                             <td>{{ usage.temperature }}</td>
                             <td>{{ usage.utilization }}</td>
+                            {% if usage.processes|length > 0 %}
+                                {% for process in usage.processes %}
+                                    <td>{{ process.username }}</td>
+                                    <td>{{ process.gpu_memory_usage }}</td>
+                                    <td class="collapsible">
+                                        <div class="collapsible-header">Click to show</div>
+                                        <div class="collapsible-body"> {{ process.full_command }} </div>
+                                    </td>
+                                {% endfor %}
+
+                            {% endif %}
                         </tr>
                     {% endfor %}
                 {% else %}
@@ -70,6 +103,22 @@
             {% endfor %}
         </tbody>
     </table>
+
+
+    <script>
+        const headers = document.querySelectorAll('.collapsible-header');
+        const tds = document.querySelectorAll('.collapsible');
+
+        // tds.forEach((td) => {
+            // td.classList.add('open');
+        // });
+
+        headers.forEach((header) => {
+            header.addEventListener('click', function () {
+                this.parentNode.classList.toggle('open');
+            });
+        });
+    </script>
 </body>
 </html>
 
