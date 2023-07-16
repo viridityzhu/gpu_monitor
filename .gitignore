@@ -1,3 +1,4 @@
 *~
 conf.py
 *.pyc
+*.code-workspace
