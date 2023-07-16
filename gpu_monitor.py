@@ -1,9 +1,22 @@
 import json
+import argparse
 from flask import Flask, render_template
 # import paramiko
 from fabric import Connection
 from fabric import task
-from conf import *
+
+# Create an argument parser
+parser = argparse.ArgumentParser()
+parser.add_argument("--no-proxy", action="store_true", help="Disable proxy")
+
+# Parse the command-line arguments
+args = parser.parse_args()
+
+# Import the appropriate configuration file based on the command-line argument
+if args.no_proxy:
+    from conf_no_proxy import *
+else:
+    from conf import *
 
 app = Flask(__name__)
 
