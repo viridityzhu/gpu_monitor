@@ -1,4 +1,6 @@
 *~
+.DS_Store
 conf.py
+conf_no_proxy.py
 *.pyc
 *.code-workspace

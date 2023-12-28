@@ -156,8 +156,7 @@ def index():
         except Exception as e:
             print(e)
             gpu_info[server_name] = "Error getting GPU usage"
-    print(gpu_info)
     return render_template('gpu_status.html', gpu_info=gpu_info)
 
 if __name__ == '__main__':
-    app.run(debug=True)
+    app.run(debug=False)
